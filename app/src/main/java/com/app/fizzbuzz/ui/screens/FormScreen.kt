@@ -2,23 +2,15 @@ package com.app.fizzbuzz.ui.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import com.app.fizzbuzz.model.GameInputs
+import com.app.fizzbuzz.ui.GameViewModel
 import com.app.fizzbuzz.ui.components.GameForm
 import com.app.fizzbuzz.ui.components.Header
-import com.app.fizzbuzz.ui.theme.FizzBuzzTheme
 
 @Composable
-fun FormScreen() {
+fun FormScreen(onPlayButtonClicked: (GameInputs)->Unit, gameViewModel: GameViewModel) {
     Column {
         Header()
-        GameForm()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    FizzBuzzTheme {
-        FormScreen()
+        GameForm(onPlayButtonClicked, gameViewModel)
     }
 }

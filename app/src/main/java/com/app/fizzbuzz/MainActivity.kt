@@ -1,4 +1,4 @@
- package com.app.fizzbuzz
+package com.app.fizzbuzz
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,12 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.app.fizzbuzz.ui.FizzBuzzApp
 import com.app.fizzbuzz.ui.screens.FormScreen
+import com.app.fizzbuzz.ui.screens.ResultScreen
 import com.app.fizzbuzz.ui.theme.FizzBuzzTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,12 +27,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    FormScreen()
+                    FizzBuzzApp()
                 }
             }
         }
     }
 }
+
+
+
 
 
 

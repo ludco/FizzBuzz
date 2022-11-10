@@ -15,9 +15,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.app.fizzbuzz.R
+import com.app.fizzbuzz.model.GameInputs
+import com.app.fizzbuzz.ui.GameViewModel
 
 @Composable
-fun GameForm() {
+fun GameForm(onPlayButtonClicked: (GameInputs) -> Unit, gameViewModel: GameViewModel) {
 
     val focusManager = LocalFocusManager.current
     var number1 by remember { mutableStateOf("") }
@@ -25,6 +27,17 @@ fun GameForm() {
     var word1 by remember { mutableStateOf("") }
     var word2 by remember { mutableStateOf("") }
     var sliderPosition by remember { mutableStateOf(0f) }
+
+    fun onSubmit() {
+        val gameInputs = GameInputs(
+            number1 = number1.toInt(),
+            number2 = number2.toInt(),
+            word1 = word1,
+            word2 = word2,
+            limit = sliderPosition.toInt()
+        )
+        onPlayButtonClicked(gameInputs)
+    }
 
 
     Column(
@@ -109,8 +122,8 @@ fun GameForm() {
 
         // --------- Submit button Part ----------
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "Play !")
+            Button(onClick = { onSubmit() }) {
+                Text(text = stringResource(R.string.play))
             }
         }
 
