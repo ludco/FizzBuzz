@@ -17,16 +17,27 @@ import androidx.compose.ui.unit.dp
 import com.app.fizzbuzz.R
 import com.app.fizzbuzz.model.GameInputs
 import com.app.fizzbuzz.ui.GameViewModel
+import com.app.fizzbuzz.utils.checkNumberValidation
+import com.app.fizzbuzz.utils.checkWordValidation
+
 
 @Composable
-fun GameForm(onPlayButtonClicked: (GameInputs) -> Unit, gameViewModel: GameViewModel) {
+fun GameForm(
+    onPlayButtonClicked: (GameInputs) -> Unit,
+    gameViewModel: GameViewModel,
+) {
 
     val focusManager = LocalFocusManager.current
     var number1 by remember { mutableStateOf("") }
+    var number1Error by remember { mutableStateOf(false) }
     var number2 by remember { mutableStateOf("") }
+    var number2Error by remember { mutableStateOf(false) }
     var word1 by remember { mutableStateOf("") }
+    var word1Error by remember { mutableStateOf(false) }
     var word2 by remember { mutableStateOf("") }
-    var sliderPosition by remember { mutableStateOf(0f) }
+    var word2Error by remember { mutableStateOf(false) }
+    var sliderPosition by remember { mutableStateOf(1f) }
+
 
     fun onSubmit() {
         val gameInputs = GameInputs(
@@ -48,10 +59,15 @@ fun GameForm(onPlayButtonClicked: (GameInputs) -> Unit, gameViewModel: GameViewM
 
         // --------- Numbers Part ----------
         Text(text = stringResource(R.string.enter_numbers))
-        Row() {
+        Row(
+            modifier = Modifier
+                .height(IntrinsicSize.Max)
+        ) {
             InputField(
                 value = number1,
-                onValueChange = { number1 = it },
+                onValueChange = {
+                    number1 = it; number1Error = checkNumberValidation(it).error
+                },
                 label = R.string.number_1,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number,
@@ -59,22 +75,28 @@ fun GameForm(onPlayButtonClicked: (GameInputs) -> Unit, gameViewModel: GameViewM
                 ),
                 keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Right) }),
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(15.dp)
+                    .weight(0.5f)
+                    .padding(15.dp),
+                isError = number1Error,
+                errorMsg = checkNumberValidation(number1).message
             )
 
             InputField(
                 value = number2,
-                onValueChange = { number2 = it },
+                onValueChange = { number2 = it; number2Error = checkNumberValidation(it).error },
                 label = R.string.number_2,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
                 ),
-                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) }),
+                keyboardActions = KeyboardActions(onNext = {
+                    focusManager.moveFocus(FocusDirection.Next)
+                }),
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(15.dp)
+                    .weight(0.5f)
+                    .padding(15.dp),
+                isError = number2Error,
+                errorMsg = checkNumberValidation(number2).message
             )
         }
 
@@ -82,10 +104,13 @@ fun GameForm(onPlayButtonClicked: (GameInputs) -> Unit, gameViewModel: GameViewM
 
         // --------- Words Part ----------
         Text(text = stringResource(R.string.enter_words))
-        Row {
+        Row(
+            Modifier
+                .height(IntrinsicSize.Max)
+        ) {
             InputField(
                 value = word1,
-                onValueChange = { word1 = it },
+                onValueChange = { word1 = it; word1Error = checkWordValidation(word1).error },
                 label = R.string.word_1,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Text,
@@ -94,11 +119,13 @@ fun GameForm(onPlayButtonClicked: (GameInputs) -> Unit, gameViewModel: GameViewM
                 keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Right) }),
                 modifier = Modifier
                     .weight(1f)
-                    .padding(15.dp)
+                    .padding(15.dp),
+                isError = word1Error,
+                errorMsg = checkWordValidation(word1).message
             )
             InputField(
                 value = word2,
-                onValueChange = { word2 = it },
+                onValueChange = { word2 = it; word2Error = checkWordValidation(word2).error },
                 label = R.string.word_2,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Text,
@@ -107,7 +134,9 @@ fun GameForm(onPlayButtonClicked: (GameInputs) -> Unit, gameViewModel: GameViewM
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 modifier = Modifier
                     .weight(1f)
-                    .padding(15.dp)
+                    .padding(15.dp),
+                isError = word2Error,
+                errorMsg = checkWordValidation(word2).message
             )
         }
 
@@ -122,7 +151,11 @@ fun GameForm(onPlayButtonClicked: (GameInputs) -> Unit, gameViewModel: GameViewM
 
         // --------- Submit button Part ----------
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Button(onClick = { onSubmit() }) {
+            Button(
+                onClick = { onSubmit() },
+                enabled = number1.isNotEmpty() && !number1Error && number2.isNotEmpty() && !number2Error && word1.isNotEmpty() &&
+                        !word1Error && word2.isNotEmpty() && !word2Error
+            ) {
                 Text(text = stringResource(R.string.play))
             }
         }

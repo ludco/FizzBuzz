@@ -1,6 +1,7 @@
 package com.app.fizzbuzz.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -30,16 +31,17 @@ fun ResultScreen(gameUiState: GameUiState, onPlayAgainButtonClicked: () -> Unit)
         }
         LazyColumn(
             modifier = Modifier
-                .fillMaxWidth().fillMaxHeight(0.8f)
+                .fillMaxWidth()
+                .fillMaxHeight(0.8f)
                 .clip(RoundedCornerShape(10.dp))
-                .background(color = MaterialTheme.colors.primary)
+                .border(width = 2.dp, color = MaterialTheme.colors.primary)
         ) {
             items(gameUiState.result) { item ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(text = "${item}, ", textAlign = TextAlign.Center, color = Color.White)
+                    Text(text = "${item}, ", textAlign = TextAlign.Center, color =  MaterialTheme.colors.primary)
                 }
 
             }

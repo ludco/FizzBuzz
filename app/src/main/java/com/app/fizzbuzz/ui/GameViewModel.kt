@@ -18,8 +18,9 @@ class GameViewModel : ViewModel() {
         var list = mutableListOf<String>()
         for (i in 1..gameInputs.limit) {
             when {
-                (i % gameInputs.number1 == 0) -> list.add(gameInputs.word1)
-                (i % gameInputs.number2 == 0) -> list.add(gameInputs.word2)
+                (i % gameInputs.number1 == 0 && i % gameInputs.number2 != 0) -> list.add(gameInputs.word1)
+                (i % gameInputs.number2 == 0 && i % gameInputs.number1 != 0) -> list.add(gameInputs.word2)
+                (i % gameInputs.number1 == 0 && i % gameInputs.number2 == 0) -> list.add(gameInputs.word1 + gameInputs.word2)
                 else -> list.add(i.toString())
             }
         }
